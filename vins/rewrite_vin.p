@@ -16,6 +16,7 @@
 
 {bislogin.i}
 {intrface.get xclass}
+/*exs XLRTEH4300G230462*/
 DEFINE VARIABLE code_vin AS CHAR.
 
 DEFINE VARIABLE choise_vin AS CHAR NO-UNDO INIT '' LABEL 'Choise vin: 1 or 2' FORMAT 'x(1)'.
@@ -28,6 +29,9 @@ UPDATE input_vin_new WITH FRAME fId.
 HIDE FRAME fId.
 DEFINE VARIABLE filelog AS CHARACTER NO-UNDO.
 DEFINE STREAM log_strm.
+
+DEFINE VARIABLE counter AS INT INITIAL 0 NO-UNDO.
+
 
 filelog = 'rewrite_vin.log'.
 OUTPUT STREAM log_strm TO VALUE(filelog) APPEND CONVERT TARGET "UTF-8".
@@ -42,16 +46,36 @@ ELSE DO:
     END.
     
     
-FOR EACH signs WHERE signs.file-name = 'term-obl' AND
-signs.code = code_vin and
-signs.xattr-value = input_vin:         
-    assign signs.xattr-value = input_vin_new.
-    display signs.
-    PUT STREAM log_strm UNFORMATTED 'for 'signs.surrogate SKIP.
-    PUT STREAM log_strm UNFORMATTED 'change ' code_vin ' : ' input_vin ' -----> ' input_vin_new " was successful" SKIP.
+IF choise_vin='' or input_vin='' or input_vin_new='' THEN DO:
+    MESSAGE "Fill in all the fields!"  VIEW-AS ALERT-BOX.
+    PUT STREAM log_strm UNFORMATTED 'Empty field(s)!' SKIP. 
+    END.
+ELSE DO:
+/*    MESSAGE "ok" VIEW-AS ALERT-BOX.*/
+    FOR EACH signs WHERE signs.file-name = 'term-obl' AND
+    signs.code = code_vin and
+    signs.xattr-value = input_vin:         
+        assign signs.xattr-value = input_vin_new.
+        counter = counter + 1.
+        /*debugging*/
+/*        display signs.*/       
+/*        display signs.code.               */
+/*        display signs.surrogate.          */
+/*        display "new: " signs.xattr-value.*/
+        
+        MESSAGE "For " signs.surrogate "\n" signs.code "changed. New value: " signs.xattr-value VIEW-AS ALERT-BOX.
+            
+        PUT STREAM log_strm UNFORMATTED 'for 'signs.surrogate SKIP.
+        PUT STREAM log_strm UNFORMATTED 'change ' code_vin ' : ' input_vin ' -----> ' input_vin_new " was successful" SKIP.
+    end.
     
-END.
+    if counter = 0 then do:
+        MESSAGE counter ' No changes.' VIEW-AS ALERT-BOX.
+        PUT STREAM log_strm UNFORMATTED 'No changes.' SKIP. 
+    end.
+ END.
 
-PUT STREAM log_strm UNFORMATTED '___________________________________________________________' SKIP.
+PUT STREAM log_strm UNFORMATTED counter ' VIN(s) changed.' SKIP. 
+PUT STREAM log_strm UNFORMATTED '______________________________________________________________' SKIP.
 
 OUTPUT CLOSE.
