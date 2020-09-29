@@ -1,0 +1,11 @@
+/*to clear field exit-date*/
+{bislogin.i}
+FIND FIRST term-obl WHERE term-obl.contract = 'Кредит' AND
+term-obl.cont-code = '[num main dog]' AND
+term-obl.idnt = 5 AND
+term-obl.symbol = 'Ч' AND
+term-obl.fop = [cust code] AND
+term-obl.amt-rub = [sum 00.00] AND
+term-obl.fop-date = [date mm/dd/yyyy].
+IF avail term-obl  
+    THEN  term-obl.sop-date = ?. 
