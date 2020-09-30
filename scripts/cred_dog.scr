@@ -10,10 +10,16 @@ term-obl.fop-date = [date mm/dd/yyyy].
 IF avail term-obl  
     THEN  term-obl.sop-date = ?. 
     
-    /*Change of performance date on additional condition of the loan agreement*/
+/*Change of performance date on additional condition of the loan agreement*/
 {bislogin.i}
  find first term-obl where term-obl.contract = 'Кредит' and
    term-obl.cont-code = '[loannum]' and
      term-obl.idnt = 55 and
             term-obl.nn = 1038 no-error.
         if avail term-obl then term-obl.fop-date = 08/31/2020.
+        
+/*to change dr*/        
+{bislogin.i}
+{intrface.get xclass}
+UpdateSigns("loan","Кредит,30М17-кр-USD","ДатаВыборки",'28/04/2015',YES)
+NO-ERROR.
