@@ -1,6 +1,13 @@
 /*change begin date */
 {bislogin.i}
-  FIND FIRST loan-cond 
-    WHERE loan-cond.contract = 'Аккр' AND
-    loan-cond.cont-code = '[akkr num]'.
-  loan-cond.since = 10/22/2018.
+FIND FIRST loan-cond 
+WHERE loan-cond.contract = 'Аккр' AND
+loan-cond.cont-code = '[akkr num]'.
+loan-cond.since = 10/22/2018.
+  
+/*repen*/
+{bislogin.i}
+FIND FIRST loan WHERE loan.contract = 'Аккр' AND
+loan.cont-code = '[akkr num]'.
+loan.close-date = ?.
+loan.loan-status = 'ОТКР'.
