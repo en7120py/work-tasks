@@ -11,3 +11,10 @@ FIND FIRST loan WHERE loan.contract = 'Аккр' AND
 loan.cont-code = '[akkr num]'.
 loan.close-date = ?.
 loan.loan-status = 'ОТКР'.
+
+/*delete condition*/
+{bislogin.i}
+FOR EACH loan-cond WHERE cont-code = '80Н1[...]-EUR 001'
+AND since = 02/12/2019 :
+delete loan-cond.
+END.
