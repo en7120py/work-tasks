@@ -1,11 +1,38 @@
 /*to clear field exit-date*/
 {bislogin.i}
-FIND FIRST term-obl WHERE term-obl.contract = '������' AND
-term-obl.cont-code = '[num main dog]' AND
-term-obl.idnt = 5 AND
-term-obl.symbol = '�' AND
-term-obl.fop = [cust code] AND
-term-obl.amt-rub = [sum 00.00] AND
-term-obl.fop-date = [date mm/dd/yyyy].
+FIND FIRST term-obl WHERE term-obl.contract = 'Êðåäèò' AND
+    term-obl.cont-code = '[num main dog]' AND
+    term-obl.idnt = 5 AND
+    term-obl.symbol = '×' AND
+    term-obl.fop = [cust code] AND
+    term-obl.amt-rub = [sum 00.00] AND
+    term-obl.fop-date = [date mm/dd/yyyy].
 IF avail term-obl  
     THEN  term-obl.sop-date = ?. 
+    
+/*Change of performance date on additional condition of the loan agreement*/
+{bislogin.i}
+find first term-obl where term-obl.contract = 'Кредит' and
+term-obl.cont-code = '[loannum]' and
+term-obl.idnt = 55 and
+term-obl.nn = 1038 no-error.
+    if avail term-obl then term-obl.fop-date = 08/31/2020.
+        
+/*to change dr*/        
+{bislogin.i}
+{intrface.get xclass}
+UpdateSigns("loan","Кредит,30М17-кр-USD","ДатаВыборки",'28/04/2015',YES) NO-ERROR.
+
+/*to change vin or vin2*/  
+{bislogin.i}
+{intrface.get xclass}
+FOR EACH signs WHERE signs.file-name = 'term-obl' AND
+/*signs.code = 'VIN-code' and*/
+signs.code = 'VIN2-code' and
+signs.surrogate = 'ЉаҐ¤Ёв,ЉаҐ¤Ёв|00†07-053Љђ-USD|5|01/01/80|3,543,01/01/80,0'
+/*NO-LOCK*/:
+display signs.code.
+display signs.xattr-value.
+ASSIGN signs.xattr-value='er1455'.
+end.
+
