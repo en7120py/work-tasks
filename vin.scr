@@ -1,0 +1,18 @@
+/*был изменен номер обеспеч., 
+а в др вина остался старый, которого уже не существует
+здесь перепишем номер обеспечения у всех винов данного договора*/
+{bislogin.i}
+{intrface.get xclass}
+DEFINE VARIABLE   vTmpStr  AS CHARACTER NO-UNDO.
+FOR EACH term-obl WHERE term-obl.class-code = 'term-obl-vin'
+   AND term-obl.cont-code = 'Кред..из истории создания вин-а...|01/01/80|6':
+vTmpStr = GetXAttrvalueEx("term-obl", term-obl.Contract + "," +
+term-obl.cont-code + ",543," + String(term-obl.end-date) + "," +
+String(term-obl.nn), "НомДогОб",'').
+
+/*UpdateSigns("term-obl", term-obl.Contract + "," +
+term-obl.cont-code + ",543," + String(term-obl.end-date) + "," +
+String(term-obl.nn), "НомДогОб", '1нов дог обеспUR05', ?).*/
+
+displ  term-obl.nn vTmpStr FORMAT 'x(25)'.
+       END.
