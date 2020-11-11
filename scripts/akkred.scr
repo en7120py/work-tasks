@@ -1,3 +1,9 @@
+/*change rasch. date */
+{bislogin.i}
+ find first term-obl where term-obl.contract = 'Аккр' and
+ term-obl.cont-code = '[akkr num]'  no-error.
+if avail term-obl then term-obl.sop-date = 09/30/2019.
+
 /*change begin date */
 {bislogin.i}
 FIND FIRST loan-cond 
@@ -14,7 +20,7 @@ loan.loan-status = 'ОТКР'.
 
 /*delete condition*/
 {bislogin.i}
-FOR EACH loan-cond WHERE cont-code = '80Н1[...]-EUR 001'
+FOR EACH loan-cond WHERE cont-code = '[akkr num]'
 AND since = 02/12/2019 :
 delete loan-cond.
 END.
