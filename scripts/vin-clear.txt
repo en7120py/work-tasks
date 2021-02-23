@@ -1,0 +1,18 @@
+Изменить тип со 103 на 101
+из истории создания вина составить срррогат
+И скриптом установить xattr-value = ''
+
+{bislogin.i}
+{intrface.get xclass}
+FOR EACH signs WHERE signs.file-name = 'term-obl' AND
+signs.code = 'VIN-code' and
+/*signs.code = 'VIN2-code' and */
+
+signs.surrogate =
+'Кредит,Кредит|krnum|5|01/01/80|1,543,01/01/80,1'
+display signs.code.
+display signs.xattr-value.
+ASSIGN signs.xattr-value=''.
+end.
+
+Для проверки - прикрепить файл
