@@ -1,0 +1,14 @@
+{bislogin.i}
+{intrface.get xclass}
+DEFINE VARIABLE   vTmpStr  AS CHARACTER NO-UNDO.
+FOR EACH term-obl WHERE term-obl.class-code = 'term-obl-vin'
+AND term-obl.cont-code = 'Кредит|numkr|5|01/01/80|2':
+vTmpStr = GetXAttrvalueEx("term-obl", term-obl.Contract + "," + 
+term-obl.cont-code + ",543," + String(term-obl.end-date) + "," + 
+String(term-obl.nn), "НомДогОб",'').
+
+UpdateSigns("term-obl", term-obl.Contract + "," + term-obl.cont-code + ",543," +
+String(term-obl.end-date) + "," + String(term-obl.nn), "НомДогОб", 'numobespnew', ?).
+
+displ  term-obl.nn vTmpStr FORMAT 'x(25)'.
+END.
